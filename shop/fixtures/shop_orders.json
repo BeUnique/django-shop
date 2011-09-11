@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "shop.order", "fields": {"status": 1, "order_total": "10", "created": "2011-09-11 17:07:09", "modified": "2011-09-11 17:07:09", "order_subtotal": "0", "billing_address_text": "billing address example", "user": null, "shipping_address_text": "shipping address example"}}]
