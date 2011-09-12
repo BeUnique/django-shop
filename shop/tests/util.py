@@ -40,12 +40,9 @@ class CartUtilsTestCase(TestCase):
     """
     Tests the cart util functions in the util package
     """
-    
+    fixtures = ['shop_test_users']
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         self.cart = Cart.objects.create()
         
         self.request = Mock()
@@ -111,16 +108,14 @@ class LoaderTestCase(TestCase):
         self.assertRaises(ImproperlyConfigured, load_class, class_to_load)
         
 class AddressUtilTestCase(TestCase):
+    fixtures = ['shop_test_users', 'shop_test_addresses']
     
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         
-        self.country = Country.objects.create(name="Switzerland")
+        self.country = Country.objects.get(id=1)
         
-        self.address = Address.objects.create(country=self.country)
+        self.address = Address.objects.get(id=1)
         
         self.request = Mock()
         setattr(self.request, 'user', None)

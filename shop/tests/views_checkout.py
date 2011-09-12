@@ -14,16 +14,14 @@ from shop.views.checkout import CheckoutSelectionView, ThankYouView
 
         
 class ShippingBillingViewTestCase(TestCase):
-    
+    fixtures = ['shop_test_users', 'shop_test_addresses']    
+
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         
-        self.country = Country.objects.create(name="Switzerland")
+        self.country = Country.objects.get(id=1)
         
-        self.address = Address.objects.create(country=self.country)
+        self.address = Address.objects.get(id=1)
         
         self.request = Mock()
         setattr(self.request, 'user', self.user)
@@ -143,34 +141,18 @@ class ShippingBillingViewTestCase(TestCase):
 
 
 class ShippingBillingViewOrderStuffTestCase(TestCase):
-    
+    fixtures = ['shop_test_orders', 'shop_test_addresses']    
+
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         
-        self.order = Order.objects.create()
+        self.order = Order.objects.get(id=1)
         
-        self.country = Country.objects.create(name='CH')
+        self.country = Country.objects.get(id=1)
         
-        self.s_add = Address.objects.create() # Shipping
-        self.s_add.name = 'TestName'
-        self.s_add.address = 'address'
-        self.s_add.city = 'city'
-        self.s_add.zip_code = 'zip'
-        self.s_add.state = 'state'
-        self.s_add.country = self.country
-        self.s_add.save()
+        self.s_add = Address.objects.get(id=1) # Shipping
         
-        self.b_add = Address.objects.create() # Billing
-        self.s_add.name = 'TestName'
-        self.b_add.address = 'address'
-        self.b_add.city = 'city'
-        self.b_add.zip_code = 'zip'
-        self.b_add.state = 'state'
-        self.b_add.country = self.country
-        self.b_add.save()
+        self.b_add = Address.objects.get(id=2) # Billing
         
         self.request = Mock()
         setattr(self.request, 'user', self.user)
@@ -203,21 +185,17 @@ class ShippingBillingViewOrderStuffTestCase(TestCase):
 
 
 class CheckoutCartToOrderTestCase(TestCase):
+    fixtures = ['shop_test_carts']
 
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         
         self.request = Mock()
         setattr(self.request, 'user', self.user)
         setattr(self.request, 'session', {})
         setattr(self.request, 'method', 'GET')
 
-        self.cart = Cart()
-        self.cart.user = self.user
-        self.cart.save()
+        self.cart = Cart.objects.get(id=1)
 
     def test_order_created(self):
         
@@ -226,18 +204,17 @@ class CheckoutCartToOrderTestCase(TestCase):
         self.assertEqual(res.order_total, Decimal('0'))
 
 class ThankYouViewTestCase(TestCase):
+    fixtures = ['shop_test_orders']
+
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         
         self.request = Mock()
         setattr(self.request, 'user', self.user)
         setattr(self.request, 'session', {})
         setattr(self.request, 'method', 'GET')
 
-        self.order = Order.objects.create(user=self.user)
+        self.order = Order.objects.get(id=2)
 
     def test_get_context_gives_correct_order(self):
         view = ThankYouView(request=self.request)

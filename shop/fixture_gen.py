@@ -18,7 +18,7 @@ def test_users():
 @fixture_generator(Order, requires=['shop.test_users'])	
 def test_orders():
     order = Order()
-    order.order_subtotal = Decimal('0.00')
+    order.order_subtotal = Decimal('10.00')
     order.order_total = Decimal('10.00')
     order.shipping_cost = Decimal('0')
     order.shipping_address_text = 'shipping address example'
@@ -34,14 +34,32 @@ def test_orders():
 	
 @fixture_generator(Product)
 def test_products():
-	product = Product()
-	product.name = "TestProduct"
-	product.slug = "TestProduct"
-	product.short_description = "TestProduct"
-	product.long_description = "TestProduct"
-	product.active = True
-	product.unit_price = Decimal('100')
-	product.save()
+    product = Product()
+    product.name = "TestProduct"
+    product.slug = "TestProduct"
+    product.short_description = "TestProduct"
+    product.long_description = "TestProduct"
+    product.active = True
+    product.unit_price = Decimal('100')
+    product.save()
+	
+    product1 = Product()
+    product1.name = 'test'
+    product1.slug = 'test'
+    product1.unit_price = Decimal('1.0')
+    product1.save()
+    
+    product2 = Product()
+    product2.name = 'test2'
+    product2.slug = 'test2'
+    product2.unit_price = Decimal('1.0')
+    product2.save()
+    
+    product3 = Product()
+    product3.name = 'test3'
+    product3.slug = 'test3'
+    product3.unit_price = Decimal('1.0')
+    product3.save()
 
 @fixture_generator(Cart, requires=['shop.test_users'])
 def test_carts():
@@ -75,16 +93,29 @@ def test_addresses():
     address2.is_shipping = False
     address2.save()
 
-@fixture_generator(OrderItem, requires=['shop.test_orders'])
+@fixture_generator(OrderItem, requires=['shop.test_orders',
+										'shop.test_products'])
 def test_order_items():
-	orderitem = OrderItem()
-	orderitem.order = Order.objects.get(id=2)
-	orderitem.product_name = 'Test item'
-	orderitem.unit_price = Decimal("100")
-	orderitem.quantity = 1
-	orderitem.line_subtotal = Decimal('100')
-	orderitem.line_total = Decimal('110')
-	orderitem.save()
+    orderitem = OrderItem()
+    orderitem.order = Order.objects.get(id=2)
+    orderitem.product_name = 'Test item'
+    orderitem.unit_price = Decimal("100")
+    orderitem.quantity = 1
+    orderitem.line_subtotal = Decimal('100')
+    orderitem.line_total = Decimal('110')
+    orderitem.save()
+	
+    orderitem1 = OrderItem()
+    orderitem1.order = Order.objects.get(id=1)
+    orderitem1.product = Product.objects.get(id=2)
+    orderitem1.quantity = 5
+    orderitem1.save()
+    
+    orderitem2 = OrderItem()
+    orderitem2.order = Order.objects.get(id=1)
+    orderitem2.product = Product.objects.get(id=3)
+    orderitem2.quantity = 1
+    orderitem2.save()
 
 @fixture_generator(ExtraOrderPriceField, requires=['shop.test_order_items'])
 def test_extra_order_price_field():

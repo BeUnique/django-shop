@@ -15,14 +15,10 @@ from shop.views.product import ProductDetailView
 
 
 class ProductDetailViewTestCase(TestCase):
+    fixtures = ['shop_test_products']    
+
     def setUp(self):
-        
-        self.product = Product()
-        self.product.name = 'test'
-        self.product.short_description = 'test'
-        self.product.long_description = 'test'
-        self.product.unit_price = Decimal('1.0')
-        self.product.save()
+        self.product = Product.objects.get(id=2)
         
         self.view = ProductDetailView(kwargs={'pk':self.product.id})
     
@@ -39,11 +35,10 @@ class ProductDetailViewTestCase(TestCase):
         self.assertEqual(len(tmp), 1)
         
 class CartDetailsViewTestCase(TestCase):
+    fixtures = ['shop_test_users']
+    
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Tester")
+        self.user = User.objects.get(id=1)
         
         self.cart = Cart.objects.create()
         self.product= Product.objects.create()

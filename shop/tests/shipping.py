@@ -31,24 +31,17 @@ class ValidMockShippingBackend(NamedMockShippingBackend):
 
 
 class GeneralShippingBackendTestCase(TestCase):
+    fixtures = ['shop_test_orders']    
 
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         backends_pool.use_cache = False
-        
-        self.order = Order()
-        self.order.order_subtotal = Decimal('10')
-        self.order.order_total = Decimal('10')
-        self.order.shipping_cost = Decimal('0')
-        
-        self.order.shipping_address_text = 'shipping address example'
-        self.order.billing_address_text = 'billing address example'
-        
-        self.order.save()
-    
+        self.order = Order.objects.get(id=1)
+		# set user to None for not usable fixture order
+        self.order2 = Order.objects.get(id=2)
+        self.order2.user = None
+        self.order2.save()
+		
     def test_enforcing_of_name_works(self):
         MODIFIERS = ['shop.tests.shipping.MockShippingBackend']
         with SettingsOverride(SHOP_SHIPPING_BACKENDS=MODIFIERS):
@@ -106,22 +99,15 @@ class GeneralShippingBackendTestCase(TestCase):
 
 
 class ShippingApiTestCase(TestCase):
+    fixtures = ['shop_test_orders']    
 
     def setUp(self):
-        self.user = User.objects.create(username="test", email="test@example.com")
+        self.user = User.objects.get(id=1)
 
         self.request = Mock()
         setattr(self.request, 'user', None)
 
-        self.order = Order()
-        self.order.order_subtotal = Decimal('10')
-        self.order.order_total = Decimal('10')
-        self.order.shipping_cost = Decimal('0')
-
-        self.order.shipping_address_text = 'shipping address example'
-        self.order.billing_address_text = 'billing address example'
-
-        self.order.save()
+        self.order = Order.objects.get(id=1)
     
         self.shipping_label = "Shipping"
         self.shipping_value = Decimal("10")

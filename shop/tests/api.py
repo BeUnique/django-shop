@@ -36,7 +36,7 @@ class ShopApiTestCase(TestCase):
     
     def test_get_order_subtotal(self):
         res = self.api.get_order_subtotal(self.order)
-        self.assertEqual(res, Decimal('0'))
+        self.assertEqual(res, Decimal('10'))
 
     def test_get_order_short_name(self):
         res = self.api.get_order_short_name(self.order)
