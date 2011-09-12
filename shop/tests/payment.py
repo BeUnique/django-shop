@@ -105,43 +105,22 @@ class GeneralPaymentBackendTestCase(TestCase):
             self.assertEqual(list, list2)
         
 class PayOnDeliveryTestCase(TestCase):
-    fixtures = ['shop_test_users']
+    fixtures = ['shop_test_extra_order_item_price_field', 'shop_test_addresses']
 
     def setUp(self):
-        self.user = User.objects.get(id=1)
-        self.user.save()
-        
+        self.user = User.objects.get(username='test')
         self.country = Country.objects.create(name='CH')
-        
-        self.address = Address()
+        self.address = Address.objects.get(id=1)
         self.address.client = self.client
-        self.address.address = 'address'
-        self.address.address2 = 'address2'
-        self.address.zip_code = '1234'
-        self.address.state = 'ZH'
-        self.address.country = self.country
-        self.address.is_billing = False
-        self.address.is_shipping = True
         self.address.save()
         
-        self.address2 = Address()
+        self.address2 = Address.objects.get(id=2)
         self.address2.client = self.client
-        self.address2.address = '2address'
-        self.address2.address2 = '2address2'
-        self.address2.zip_code = '21234'
-        self.address2.state = '2ZH'
-        self.address2.country = self.country
-        self.address2.is_billing = True
-        self.address2.is_shipping = False
         self.address2.save()
-        
+
         # The order fixture
         
-        self.order = Order()
-        self.order.user = self.user
-        self.order.order_subtotal = Decimal('100') # One item worth 100
-        self.order.order_total = Decimal('120') # plus a test field worth 10
-        self.order.status = Order.PROCESSING
+        self.order = Order.objects.get(id=2)
         ship_address = self.address
         bill_address = self.address2
 
@@ -150,28 +129,10 @@ class PayOnDeliveryTestCase(TestCase):
         self.order.save()
         
         # Orderitems
-        self.orderitem = OrderItem()
-        self.orderitem.order = self.order
-    
-        self.orderitem.product_name = 'Test item'
-        self.orderitem.unit_price = Decimal("100")
-        self.orderitem.quantity = 1
-    
-        self.orderitem.line_subtotal = Decimal('100')
-        self.orderitem.line_total = Decimal('110')
-        self.orderitem.save()
+        self.orderitem = OrderItem.objects.get(id=1)
         
-        eoif = ExtraOrderItemPriceField()
-        eoif.order_item = self.orderitem
-        eoif.label = 'Fake extra field'
-        eoif.value = Decimal("10")
-        eoif.save()
-        
-        eof = ExtraOrderPriceField()
-        eof.order = self.order
-        eof.label = "Fake Taxes"
-        eof.value = Decimal("10")
-        eof.save()
+        eoif = ExtraOrderItemPriceField.objects.get(id=1)
+        eof = ExtraOrderPriceField.objects.get(id=1)
 
     def test01_backend_returns_urls(self):
         be = PayOnDeliveryBackend(shop=PaymentAPI())

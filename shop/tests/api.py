@@ -6,7 +6,7 @@ from shop.shop_api import ShopAPI
 from decimal import Decimal
 
 class ShopApiTestCase(TestCase):
-    fixtures = ['shop_test_users.json', 'shop_test_orders.json']
+    fixtures = ['shop_test_users', 'shop_test_orders']
     def setUp(self):
         self.user = User.objects.get(username="test")
         
