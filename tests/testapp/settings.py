@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'polymorphic', # We need polymorphic installed for the shop
     'shop', # The django SHOP application
+	'fixture_generator', # Used for fixture generation
     'shop.addressmodel',
     'project', # the test project application
 )

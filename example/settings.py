@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'shop', # The django SHOP application
     'shop.addressmodel',
     'myshop', # the project we just created
-	'fixture_generator' # for fixture generation
 )
 
 # A sample logging configuration. The only tangible logging
