@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "shop.product", "fields": {"name": "TestProduct", "unit_price": "100", "last_modified": "2011-09-12 12:21:35", "active": true, "date_added": "2011-09-12 12:21:35", "slug": "TestProduct", "polymorphic_ctype": 11}}]

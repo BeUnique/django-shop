@@ -40,12 +40,10 @@ class ValidMockPaymentBackend(NamedMockPaymentBackend):
     
 
 class GeneralPaymentBackendTestCase(TestCase):
-    
+    fixtures = ['shop_test_users']
+
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         backends_pool.use_cache = False
         
     def test_enforcing_of_name_works(self):
@@ -107,12 +105,10 @@ class GeneralPaymentBackendTestCase(TestCase):
             self.assertEqual(list, list2)
         
 class PayOnDeliveryTestCase(TestCase):
-    
+    fixtures = ['shop_test_users']
+
     def setUp(self):
-        self.user = User.objects.create(username="test", 
-                                        email="test@example.com",
-                                        first_name="Test",
-                                        last_name = "Toto")
+        self.user = User.objects.get(id=1)
         self.user.save()
         
         self.country = Country.objects.create(name='CH')

@@ -18,6 +18,7 @@ except:
 
 
 class CartTestCase(TestCase):
+    fixtures = ['shop_test_carts', 'shop_test_products']
     PRODUCT_PRICE = Decimal('100')
     TEN_PERCENT = Decimal(10) / Decimal(100)
 
@@ -25,19 +26,9 @@ class CartTestCase(TestCase):
 
         cart_modifiers_pool.USE_CACHE=False
 
-        self.user = User.objects.create(username="test", email="test@example.com")
-        self.product = Product()
-        self.product.name = "TestPrduct"
-        self.product.slug = "TestPrduct"
-        self.product.short_description = "TestPrduct"
-        self.product.long_description = "TestPrduct"
-        self.product.active = True
-        self.product.unit_price = self.PRODUCT_PRICE
-        self.product.save()
-
-        self.cart = Cart()
-        self.cart.user = self.user
-        self.cart.save()
+        self.user = User.objects.get(username="test")
+        self.product = Product.objects.get(id=1)
+        self.cart = Cart.objects.get(id=1)
 
     def test_empty_cart_costs_0_quantity_0(self):
         with SettingsOverride(SHOP_CART_MODIFIERS=[]):

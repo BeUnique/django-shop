@@ -23,21 +23,14 @@ except:
 
 
 class OrderUtilTestCase(TestCase):
+    fixtures = ['shop_test_users', 'shop_test_orders']
     def setUp(self):
-        self.user = User.objects.create(username="test", email="test@example.com")
+        self.user = User.objects.get(id=1)
         
         self.request = Mock()
         setattr(self.request, 'user', None)
         
-        self.order = Order()
-        self.order.order_subtotal = Decimal('10')
-        self.order.order_total = Decimal('10')
-        self.order.shipping_cost = Decimal('0')
-
-        self.order.shipping_address_text = 'shipping address example'
-        self.order.billing_address_text = 'billing address example'
-        
-        self.order.save()
+        self.order = Order.objects.get(id=1)
         
     def test_request_without_user_or_session_returns_none(self):
         ret = get_order_from_request(self.request)

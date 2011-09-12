@@ -26,24 +26,14 @@ class CarModifierUsingStatePassing(BaseCartModifier):
         return cart
 
 class CartModifiersTestCase(TestCase):
-    
+    fixtures =['shop_test_carts.json', 'shop_test_products.json']
     PRODUCT_PRICE = Decimal('100')
     
     def setUp(self):
         cart_modifiers_pool.USE_CACHE=False
-        self.user = User.objects.create(username="test", email="test@example.com")
-        self.product = Product()
-        self.product.name = "TestPrduct"
-        self.product.slug = "TestPrduct"
-        self.product.short_description = "TestPrduct"
-        self.product.long_description = "TestPrduct"
-        self.product.active = True
-        self.product.unit_price = self.PRODUCT_PRICE
-        self.product.save()
-
-        self.cart = Cart()
-        self.cart.user = self.user
-        self.cart.save()
+        self.user = User.objects.get(id=1)
+        self.product = Product.objects.get(id=1)
+        self.cart = Cart.objects.get(id=1)
     
     def test_01_cart_modifier_pool_loads_modifiers_properly(self):
         """
